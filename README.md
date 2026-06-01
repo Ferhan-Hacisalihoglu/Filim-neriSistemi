@@ -76,22 +76,27 @@ python Site/app.py
 1. **ZeroR** - Baseline model
 
 <img width="1235" height="614" alt="ZeroR" src="https://github.com/user-attachments/assets/d663f422-50fa-41e7-bec6-166b808c4e73" />
+*Baseline model that always predicts the majority class. With **63.47% accuracy**, it serves as the minimum performance benchmark for all other models.*
 
 2. **OneR** - Best single rule
 
 <img width="1207" height="614" alt="OneR" src="https://github.com/user-attachments/assets/c20569b6-531a-41bc-aad5-e904e6671756" />
+*A simple rule-based model that selects the single most influential feature. It surprisingly achieves **82.0% CV success**, showing a strong correlation between core features and user preferences.*
 
 3. **KNN** - K-Nearest Neighbors
 
 <img width="1235" height="614" alt="KNN_k=11" src="https://github.com/user-attachments/assets/3f290192-47c2-4738-b859-9f347ce53d57" />
+*Classifies movies based on feature similarity. While attaining a solid **82.7% CV success**, its high computational cost (52s training time) makes it less ideal for real-time recommendations compared to other models.*
 
 4. **Naive Bayes** - Probabilistic model
 
 <img width="1235" height="614" alt="Naive_Bayes" src="https://github.com/user-attachments/assets/94e78dd1-3d3d-48a9-aa02-40f706f7ae59" />
+*A fast probabilistic model with **77.25% CV success**. It offers great speed (0.2s) but slightly lower accuracy as it assumes feature independence, which may not hold perfectly in complex movie data.*
 
 5. **Decision Tree** - Best model ⭐
 
 <img width="1235" height="614" alt="Decision_Tree" src="https://github.com/user-attachments/assets/ab546968-96e7-415f-b4a5-dc61e5572667" />
+*Our top performer with **84.96% cross-validation success**. It provides the best balance of high accuracy and rapid execution (1.2s), effectively capturing complex decision boundaries in the dataset.*
 
 
 ### Features
@@ -225,22 +230,27 @@ python Site/app.py
 1. **ZeroR** - Baseline modeli
 
 <img width="1235" height="614" alt="ZeroR" src="https://github.com/user-attachments/assets/d663f422-50fa-41e7-bec6-166b808c4e73" />
+*En yaygın sınıfı tahmin eden temel seviye algoritma. **%63.47 doğruluk** oranıyla, diğer modellerin başarısını ölçmek için minimum referans noktasıdır.*
 
 2. **OneR** - En iyi tek kural
 
 <img width="1207" height="614" alt="OneR" src="https://github.com/user-attachments/assets/c20569b6-531a-41bc-aad5-e904e6671756" />
+*Tek bir baskın özelliğe göre karar veren basit bir modeldir. Şaşırtıcı bir şekilde **%82.0 çapraz doğrulama (CV) başarısına** ulaşarak temel özelliklerin güçlü etkisini kanıtlar.*
 
 3. **KNN** - K En Yakın Komşu
 
 <img width="1235" height="614" alt="KNN_k=11" src="https://github.com/user-attachments/assets/3f290192-47c2-4738-b859-9f347ce53d57" />
+*Matematiksel benzerliğe göre sınıflandırma yapar. **%82.7 CV başarısı** sağlasa da, yüksek hesaplama maliyeti (52 sn eğitim süresi) gerçek zamanlı öneriler için onu daha az verimli kılar.*
 
 4. **Naive Bayes** - Olasılıksal model
 
 <img width="1235" height="614" alt="Naive_Bayes" src="https://github.com/user-attachments/assets/94e78dd1-3d3d-48a9-aa02-40f706f7ae59" />
+*Oldukça hızlı (0.2 sn) çalışarak **%77.25 CV başarısı** sunar. Özellikler arası bağımsızlık varsayımı nedeniyle karmaşık veri setlerinde isabet oranı diğerlerinin biraz gerisinde kalmıştır.*
 
 5. **Decision Tree** - En iyi model ⭐
 
 <img width="1235" height="614" alt="Decision_Tree" src="https://github.com/user-attachments/assets/ab546968-96e7-415f-b4a5-dc61e5572667" />
+*En yüksek performansı gösteren modelimizdir. **%84.96 çapraz doğrulama başarısı** ve hızı (1.2 sn) ile isabet oranı ve verimlilik arasındaki en iyi dengeyi sağlar.*
 
 
 ### Özellikler (Features)

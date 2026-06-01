@@ -43,18 +43,6 @@ en_yuksek_ortalama = (
 en_yuksek_ortalama['ortalama_puan'] = en_yuksek_ortalama['ortalama_puan'].round(3)
 en_yuksek_ortalama.index += 1
 
-temizleme_data = [
-    ('Ham veri yüklendi',               'movies.csv, ratings.csv, tags.csv — yalnızca gerekli sütunlar ve optimize dtype'),
-    ('dropna() uygulandı',              'NaN içeren satırlar tüm tablolardan kaldırıldı'),
-    ('drop_duplicates() uygulandı',     'Birebir aynı satırlar kaldırıldı'),
-    ('Tür → ID kodlaması',              "Her tür benzersiz bir ID'ye eşlendi; genre_ids sütunu oluşturuldu"),
-    ('Yıl ayıklandı',                   'Başlık sonundaki "(YYYY)" deseni ile vektörize slice; nullable Int16'),
-    ('1980 öncesi filmler çıkarıldı',   'MIN_YEAR = 1980; yılı bilinmeyen filmler korundu'),
-    ('Az aktif kullanıcılar çıkarıldı', 'MIN_USER_RATINGS = 20; NumPy unique+bincount maskeleme'),
-    ('Az popüler filmler çıkarıldı',    'MIN_RATINGS = 50; ratings, tags ve movies\'den temizlendi'),
-    ('Temizlenmiş veriler kaydedildi',  'ProcessedData/ klasörüne 500K satır/parça ile yazıldı'),
-]
-
 ornek_veri_data = [
     ('movies_cleaned',    len(movies),  movies.shape[1],  round(movies.memory_usage(deep=True).sum()/1e6, 2),  ', '.join(movies.columns)),
     ('ratings_optimized', len(ratings), ratings.shape[1], round(ratings.memory_usage(deep=True).sum()/1e6, 2), ', '.join(ratings.columns)),
