@@ -7,7 +7,9 @@
 <a name="english"></a>
 # English
 
-This project is a machine learning-based movie recommendation system developed using the **MovieLens** dataset. It provides personalized movie recommendations by analyzing users' past rating habits and preferences.
+This project is a machine learning-based movie recommendation system developed using the **MovieLens** dataset. It provides personalized movie recommendations by analyzing users' past rating habits, preferred genres, and movie release years. Through a sophisticated data pipeline, it processes millions of ratings to build a robust prediction engine that suggests movies you're most likely to enjoy.
+
+The system isn't just a simple filter; it's an end-to-end data science project that covers data cleaning, feature engineering, model selection, and deployment via a web interface. By leveraging the Decision Tree algorithm, we achieve high accuracy in predicting user preferences based on historical data patterns.
 
 ---
 
@@ -45,8 +47,7 @@ F. Maxwell Harper ve Joseph A. Konstan. 2015. The MovieLens Datasets: History an
 pip install -r requirements.txt
 
 # Start the web application
-cd Site
-python app.py
+python Site/app.py
 ```
 
 ---
@@ -73,15 +74,25 @@ python app.py
 
 ### Algorithms Used
 1. **ZeroR** - Baseline model
+
 <img width="1235" height="614" alt="ZeroR" src="https://github.com/user-attachments/assets/d663f422-50fa-41e7-bec6-166b808c4e73" />
+
 2. **OneR** - Best single rule
+
 <img width="1207" height="614" alt="OneR" src="https://github.com/user-attachments/assets/c20569b6-531a-41bc-aad5-e904e6671756" />
+
 3. **KNN** - K-Nearest Neighbors
+
 <img width="1235" height="614" alt="KNN_k=11" src="https://github.com/user-attachments/assets/3f290192-47c2-4738-b859-9f347ce53d57" />
+
 4. **Naive Bayes** - Probabilistic model
+
 <img width="1235" height="614" alt="Naive_Bayes" src="https://github.com/user-attachments/assets/94e78dd1-3d3d-48a9-aa02-40f706f7ae59" />
+
 5. **Decision Tree** - Best model ⭐
+
 <img width="1235" height="614" alt="Decision_Tree" src="https://github.com/user-attachments/assets/ab546968-96e7-415f-b4a5-dc61e5572667" />
+
 
 ### Features
 - `avg_movie_rating` - Average rating of the movie
@@ -128,6 +139,19 @@ API health check
 
 ---
 
+## 🤝 Contributing
+
+We welcome contributions to make this recommendation system even better! Whether you're a data scientist, a developer, or a movie enthusiast, your input is valuable.
+
+### How to Help?
+1.  **Issues:** If you find a bug or have a feature request, please open an [Issue](https://github.com/your-username/your-repo/issues).
+2.  **Pull Requests:** Feel free to fork the repository and submit a pull request for improvements in the ML model, UI/UX, or documentation.
+3.  **Feedback:** Share your thoughts on how the recommendation logic can be improved.
+
+Let's build the best movie recommendation engine together! 🚀
+
+---
+
 **Enjoy! 🎉**
 
 ---
@@ -135,7 +159,9 @@ API health check
 <a name="türkçe"></a>
 # Türkçe
 
-Bu proje, **MovieLens** veri seti kullanılarak geliştirilmiş, makine öğrenmesi tabanlı bir film öneri sistemidir. Kullanıcıların geçmiş puanlama alışkanlıklarını ve tercihlerini analiz ederek kişiselleştirilmiş film önerileri sunar.
+Bu proje, **MovieLens** veri seti kullanılarak geliştirilmiş, makine öğrenmesi tabanlı bir film öneri sistemidir. Kullanıcıların geçmiş puanlama alışkanlıklarını, tercih ettikleri türleri ve film yıllarını analiz ederek kişiselleştirilmiş film önerileri sunar. Gelişmiş veri işleme aşamalarından geçerek milyonlarca puanlamayı analiz eden bu sistem, sizin en çok beğenebileceğiniz filmleri tahmin etmek için güçlü bir motor kullanır.
+
+Bu çalışma sadece basit bir filtreleme sistemi değil; veri temizleme, özellik mühendisliği (feature engineering), model seçimi ve web arayüzü ile yayına alma aşamalarını kapsayan uçtan uca bir veri bilimi projesidir. Karar Ağacı (Decision Tree) algoritması sayesinde, geçmiş veri kalıplarına dayanarak kullanıcı tercihlerini yüksek doğrulukla tahmin edebilmekteyiz.
 
 ---
 
@@ -197,15 +223,25 @@ python Site/app.py
 
 ### Kullanılan Algoritmalar
 1. **ZeroR** - Baseline modeli
+
 <img width="1235" height="614" alt="ZeroR" src="https://github.com/user-attachments/assets/d663f422-50fa-41e7-bec6-166b808c4e73" />
+
 2. **OneR** - En iyi tek kural
+
 <img width="1207" height="614" alt="OneR" src="https://github.com/user-attachments/assets/c20569b6-531a-41bc-aad5-e904e6671756" />
+
 3. **KNN** - K En Yakın Komşu
+
 <img width="1235" height="614" alt="KNN_k=11" src="https://github.com/user-attachments/assets/3f290192-47c2-4738-b859-9f347ce53d57" />
+
 4. **Naive Bayes** - Olasılıksal model
+
 <img width="1235" height="614" alt="Naive_Bayes" src="https://github.com/user-attachments/assets/94e78dd1-3d3d-48a9-aa02-40f706f7ae59" />
+
 5. **Decision Tree** - En iyi model ⭐
+
 <img width="1235" height="614" alt="Decision_Tree" src="https://github.com/user-attachments/assets/ab546968-96e7-415f-b4a5-dc61e5572667" />
+
 
 ### Özellikler (Features)
 - `avg_movie_rating` - Filmin ortalama puanı
@@ -249,6 +285,19 @@ Film önerisi al
 
 ### GET `/health`
 API sağlık kontrolü
+
+---
+
+## 🤝 Katkıda Bulunma
+
+Bu öneri sistemini daha iyi hale getirmek için katkılarınızı bekliyoruz! Veri bilimci, yazılımcı veya bir film tutkunu olun, her türlü desteğiniz bizim için değerlidir.
+
+### Nasıl Destek Olabilirsiniz?
+1.  **Hata Bildirimi (Issues):** Bir hata bulursanız veya yeni bir özellik öneriniz varsa lütfen [Issue](https://github.com/your-username/your-repo/issues) kısmından bildirin.
+2.  **Geliştirme (Pull Requests):** Depoyu (repository) çatallayarak (fork) ML modeli, arayüz veya dokümantasyon üzerinde yaptığınız geliştirmeleri bir çekme isteği (PR) ile bize ulaştırabilirsiniz.
+3.  **Geri Bildirim:** Öneri mantığının nasıl daha başarılı olabileceği konusundaki fikirlerinizi paylaşın.
+
+Gelin, en iyi film öneri motorunu birlikte inşa edelim! 🚀
 
 ---
 
