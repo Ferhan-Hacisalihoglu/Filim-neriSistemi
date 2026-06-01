@@ -128,15 +128,6 @@ API health check
 
 ---
 
-## 🤝 Support
-
-If you continue to have problems:
-1. Share the terminal output
-2. Note the error message
-3. Specify your operating system and Docker version
-
----
-
 **Enjoy! 🎉**
 
 ---
@@ -261,14 +252,6 @@ API sağlık kontrolü
 
 ---
 
-## 🤝 Destek
-
-Sorun yaşamaya devam ediyorsanız:
-1. Terminal çıktısını paylaş
-2. Hata mesajını not et
-3. Kullandığın işletim sistemi ve Docker sürümünü belirt
-
----
-
 **Eğlenceyle kullan! 🎉**
 
+---
