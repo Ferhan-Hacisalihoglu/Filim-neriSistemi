@@ -4,14 +4,11 @@ Bu proje, **MovieLens** veri seti kullanılarak geliştirilmiş, makine öğrenm
 
 ---
 
-## 📊 Veri Seti ve Atıf
+## 📊 Veri Seti
 
 Bu projede kullanılan veriler [GroupLens Research](https://grouplens.org/datasets/movielens/) tarafından sağlanan **MovieLens 32M (Aralık 2023)** sürümüdür.
 
 **Veri Seti Linki:** [https://grouplens.org/datasets/movielens/32m/](https://grouplens.org/datasets/movielens/32m/)
-
-### Atıf (Citation)
-> F. Maxwell Harper and Joseph A. Konstan. 2015. The MovieLens Datasets: History and Context. ACM Transactions on Interactive Intelligent Systems (TiiS) 5, 4: 19. [https://doi.org/10.1145/2827872](https://doi.org/10.1145/2827872)
 
 ---
 
@@ -22,15 +19,15 @@ Bu projede kullanılan veriler [GroupLens Research](https://grouplens.org/datase
 -   **Modern Web Arayüzü:** Flask tabanlı, kullanıcı dostu ve interaktif bir ön yüz.
 -   **Kişiselleştirme:** Yıl, tür ve puanlama trendlerine dayalı akıllı tahmin motoru.
 
+## 📸 Ekran Görüntüleri
+
+*(Bu bölüme ekran görüntülerini ekleyebilirsiniz)*
+
+---
+
 ## 🛠️ Kurulum ve Çalıştırma
 
-### 1️⃣ Docker (Önerilen)
-```bash
-docker compose up --build
-```
--   Tarayıcıda açın: `http://localhost:5000`
-
-### 2️⃣ Yerel Python Ortamı
+### 1️⃣ Yerel Python Ortamı
 ```bash
 # Bağımlılıkları yükleyin
 pip install -r requirements.txt
@@ -42,7 +39,7 @@ python app.py
 
 ---
 
-## 📁 Proye Yapısı
+## 📁 Proje Yapısı
 
 -   `dartaClean.py`: Büyük veriyi temizler ve RAM dostu hale getirir.
 -   `dataMining.py`: Modelleri eğitir ve en iyi modeli (Decision Tree) seçer.
@@ -53,9 +50,6 @@ python app.py
 
 ---
 
-
----
-
 ## 🔧 Teknik Bilgiler
 
 ### Kullanılan Teknolojiler
@@ -63,7 +57,6 @@ python app.py
 - **Frontend**: HTML5, CSS3, JavaScript
 - **ML Model**: scikit-learn (Decision Tree)
 - **Veri**: MovieLens dataset
-- **Container**: Docker + Docker Compose
 - **Web Server**: Gunicorn
 
 ### Kullanılan Algoritmalar
@@ -81,22 +74,6 @@ python app.py
 - `year` - Film yapım yılı
 - `genre_*` - Film türleri (one-hot encoded)
 
----
-
-## 🐳 Docker Komutları
-
-```bash
-# Image'ı oluştur
-docker build -t film-recommender:latest .
-
-# Container'ı çalıştır
-docker run -p 5000:5000 film-recommender:latest
-
-# Docker Compose ile (Önerilen)
-docker compose up
-
-# Container'ları listele
-docker ps
 
 # Container'ı kapat
 docker stop film-recommender-app
