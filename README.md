@@ -11,11 +11,13 @@ This project is a machine learning-based movie recommendation system developed u
 
 ---
 
-## 📊 Dataset
+## 📊 Dataset And Citation
 
 The data used in this project is the **MovieLens 32M (December 2023)** version provided by [GroupLens Research](https://grouplens.org/datasets/movielens/).
 
 **Dataset Link:** [https://grouplens.org/datasets/movielens/32m/](https://grouplens.org/datasets/movielens/32m/)
+
+F. Maxwell Harper ve Joseph A. Konstan. 2015. The MovieLens Datasets: History and Context. ACM Transactions on Interactive Intelligent Systems (TiiS) 5, 4: 19:1–19:19. <https://doi.org/10.1145/2827872>
 
 ---
 
@@ -71,10 +73,15 @@ python app.py
 
 ### Algorithms Used
 1. **ZeroR** - Baseline model
+<img width="1235" height="614" alt="ZeroR" src="https://github.com/user-attachments/assets/d663f422-50fa-41e7-bec6-166b808c4e73" />
 2. **OneR** - Best single rule
+<img width="1207" height="614" alt="OneR" src="https://github.com/user-attachments/assets/c20569b6-531a-41bc-aad5-e904e6671756" />
 3. **KNN** - K-Nearest Neighbors
+<img width="1235" height="614" alt="KNN_k=11" src="https://github.com/user-attachments/assets/3f290192-47c2-4738-b859-9f347ce53d57" />
 4. **Naive Bayes** - Probabilistic model
+<img width="1235" height="614" alt="Naive_Bayes" src="https://github.com/user-attachments/assets/94e78dd1-3d3d-48a9-aa02-40f706f7ae59" />
 5. **Decision Tree** - Best model ⭐
+<img width="1235" height="614" alt="Decision_Tree" src="https://github.com/user-attachments/assets/ab546968-96e7-415f-b4a5-dc61e5572667" />
 
 ### Features
 - `avg_movie_rating` - Average rating of the movie
@@ -141,11 +148,13 @@ Bu proje, **MovieLens** veri seti kullanılarak geliştirilmiş, makine öğrenm
 
 ---
 
-## 📊 Veri Seti
+## 📊 Veri Seti ve Atıf
 
 Bu projede kullanılan veriler [GroupLens Research](https://grouplens.org/datasets/movielens/) tarafından sağlanan **MovieLens 32M (Aralık 2023)** sürümüdür.
 
 **Veri Seti Linki:** [https://grouplens.org/datasets/movielens/32m/](https://grouplens.org/datasets/movielens/32m/)
+
+F. Maxwell Harper ve Joseph A. Konstan. 2015. The MovieLens Datasets: History and Context. ACM Transactions on Interactive Intelligent Systems (TiiS) 5, 4: 19:1–19:19. <https://doi.org/10.1145/2827872>
 
 ---
 
@@ -170,8 +179,7 @@ Bu projede kullanılan veriler [GroupLens Research](https://grouplens.org/datase
 pip install -r requirements.txt
 
 # Web uygulamasını başlatın
-cd Site
-python app.py
+python Site/app.py
 ```
 
 ---
@@ -198,10 +206,15 @@ python app.py
 
 ### Kullanılan Algoritmalar
 1. **ZeroR** - Baseline modeli
+<img width="1235" height="614" alt="ZeroR" src="https://github.com/user-attachments/assets/d663f422-50fa-41e7-bec6-166b808c4e73" />
 2. **OneR** - En iyi tek kural
+<img width="1207" height="614" alt="OneR" src="https://github.com/user-attachments/assets/c20569b6-531a-41bc-aad5-e904e6671756" />
 3. **KNN** - K En Yakın Komşu
+<img width="1235" height="614" alt="KNN_k=11" src="https://github.com/user-attachments/assets/3f290192-47c2-4738-b859-9f347ce53d57" />
 4. **Naive Bayes** - Olasılıksal model
+<img width="1235" height="614" alt="Naive_Bayes" src="https://github.com/user-attachments/assets/94e78dd1-3d3d-48a9-aa02-40f706f7ae59" />
 5. **Decision Tree** - En iyi model ⭐
+<img width="1235" height="614" alt="Decision_Tree" src="https://github.com/user-attachments/assets/ab546968-96e7-415f-b4a5-dc61e5572667" />
 
 ### Özellikler (Features)
 - `avg_movie_rating` - Filmin ortalama puanı
