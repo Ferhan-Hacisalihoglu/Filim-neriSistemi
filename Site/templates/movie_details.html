@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ movie.title }} | Film Detayları</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="bg-particles" id="bgParticles"></div>
+    <div class="app-container">
+        <header class="app-header app-header--left">
+            <div class="top-nav">
+                <div class="brand">
+                    <span class="brand-mark">🎬</span>
+                    <span class="brand-text">FilmLab</span>
+                </div>
+                <nav class="nav-links">
+                    <a href="/">Ana Sayfa</a>
+                    <a href="/recommendations">Oneri Sistemi</a>
+                </nav>
+            </div>
+        </header>
+
+        <main class="main-content">
+            <a href="javascript:history.back()" class="btn-back">← Geri Dön</a>
+            
+            <div class="details-container card">
+                <div class="details-poster" id="poster-{{ movie.movieId }}">
+                    {% if movie.poster_url %}
+                        <img src="{{ movie.poster_url }}" alt="{{ movie.title }}" onerror="this.onerror=null; loadPosterAsync('{{ movie.movieId }}', '{{ movie.tmdbId_clean }}');">
+                    {% else %}
+                        <div class="poster-fallback tmdb-placeholder" data-tmdb-id="{{ movie.tmdbId_clean }}" style="height: 450px; display: flex; align-items: center; justify-content: center; font-size: 3rem; background: #222;">
+                            {{ movie.title[:1] }}
+                        </div>
+                    {% endif %}
+                </div>
+                
+                <div class="details-info">
+                    <h1 class="details-title">{{ movie.title }}</h1>
+                    <div class="details-meta">
+                        <span>📅 {{ movie.year or 'Bilinmiyor' }}</span>
+                        <span>⭐ {{ movie.avg_movie_rating|round(1) if movie.avg_movie_rating else 'N/A' }}/5.0</span>
+                    </div>
+                    
+                    <div class="details-genres">
+                        {% for gname in movie.genre_names %}
+                            <span class="details-genre">{{ gname }}</span>
+                        {% endfor %}
+                    </div>
+
+                    <div class="details-stats">
+                        <div class="details-stat-card">
+                            <span class="details-stat-label">Film ID</span>
+                            <span class="details-stat-value">#{{ movie.movieId }}</span>
+                        </div>
+                        <div class="details-stat-card">
+                            <span class="details-stat-label">Ortalama Puan</span>
+                            <span class="details-stat-value">{{ movie.avg_movie_rating|round(2) if movie.avg_movie_rating else '—' }}</span>
+                        </div>
+                        <div class="details-stat-card">
+                            <span class="details-stat-label">TMDb ID</span>
+                            <span class="details-stat-value">{{ movie.tmdbId_clean or '—' }}</span>
+                        </div>
+                    </div>
+
+                    <div class="details-links">
+                        {% if movie.imdbId_clean %}
+                        <a href="https://www.imdb.com/title/tt{{ movie.imdbId_clean }}" target="_blank" class="btn-link btn-imdb">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/6/69/IMDB_Logo_2016.svg" width="40" alt="IMDb">
+                            Görüntüle
+                        </a>
+                        {% endif %}
+                        
+                        {% if movie.tmdbId_clean %}
+                        <a href="https://www.themoviedb.org/movie/{{ movie.tmdbId_clean }}" target="_blank" class="btn-link btn-tmdb">
+                            TMDb Detay
+                        </a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const TMDB_KEY = '8265bd1679663a7ea12ac168da84d2e8';
+            const movieId = "{{ movie.movieId }}";
+            const tmdbId = "{{ movie.tmdbId_clean }}";
+            const wrapper = document.getElementById('poster-' + movieId);
+            if (!wrapper) return;
+
+            // Mevcut img varsa onerror ile TMDb'den dene
+            const existingImg = wrapper.querySelector('img');
+            if (existingImg) {
+                existingImg.addEventListener('error', function() {
+                    if (tmdbId) {
+                        fetchTmdbPoster(tmdbId, wrapper);
+                    } else {
+                        wrapper.innerHTML = '<div class="poster-fallback" style="height:450px;display:flex;align-items:center;justify-content:center;font-size:3rem;background:#222;">🎬</div>';
+                    }
+                });
+                return;
+            }
+
+            // Poster URL yoksa doğrudan TMDb'den çek
+            if (tmdbId) {
+                fetchTmdbPoster(tmdbId, wrapper);
+            }
+
+            function fetchTmdbPoster(id, el) {
+                fetch('https://api.themoviedb.org/3/movie/' + id + '?api_key=' + TMDB_KEY + '&language=tr-TR')
+                    .then(r => r.json())
+                    .then(data => {
+                        if (data.poster_path) {
+                            const img = document.createElement('img');
+                            img.src = 'https://image.tmdb.org/t/p/w500' + data.poster_path;
+                            img.alt = "{{ movie.title }}";
+                            img.style.opacity = '0';
+                            img.style.transition = 'opacity 0.4s ease';
+                            img.addEventListener('load', () => { img.style.opacity = '1'; });
+                            img.addEventListener('error', () => {
+                                el.innerHTML = '<div class="poster-fallback" style="height:450px;display:flex;align-items:center;justify-content:center;font-size:3rem;background:#222;">🎬</div>';
+                            });
+                            el.innerHTML = '';
+                            el.appendChild(img);
+                        }
+                    })
+                    .catch(e => console.error('TMDb poster hatası:', e));
+            }
+        });
+    </script>
+</body>
+</html>
