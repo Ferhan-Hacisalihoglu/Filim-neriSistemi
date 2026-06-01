@@ -77,54 +77,6 @@ python app.py
 - `year` - Film yapım yılı
 - `genre_*` - Film türleri (one-hot encoded)
 
-
-# Container'ı kapat
-docker stop film-recommender-app
-
-# Container'ı sil
-docker rm film-recommender-app
-
-# Logs'u gör
-docker logs film-recommender-app -f
-```
-
----
-
-## 🆘 Sorun Giderme
-
-### ❌ "Docker yüklü değil" hatası
-**Çözüm**: Docker Desktop'ı https://www.docker.com/products/docker-desktop adresinden indirin ve yükleyin.
-
-### ❌ "Port 5000 kullanımda" hatası
-**Çözüm**: 
-```bash
-# Windows
-netstat -ano | findstr :5000
-taskkill /PID <PID> /F
-
-# Linux/Mac
-lsof -i :5000
-kill -9 <PID>
-```
-
-### ❌ "Model bulunamadı" hatası
-**Çözüm**: Önce `dataMining.py` ile modeli eğitin:
-```bash
-python dataMining.py
-```
-
-### ❌ Site açılmıyor
-**Çözüm**: Terminal'de hata mesajını kontrol edin:
-- Docker logs'u kontrol et: `docker logs film-recommender-app`
-- Python çalıştırıyor mısın: `python Site/app.py`'de hata mesajı bak
-
-### ❌ Çok yavaş çalışıyor
-**Çözüm**: 
-- Docker'ın kaynakları arttır (Docker Desktop ayarları)
-- Python'da doğrudan çalıştırmayı dene
-
----
-
 ## 📊 API Endpoints
 
 ### GET `/`
@@ -159,28 +111,6 @@ Film önerisi al
 
 ### GET `/health`
 API sağlık kontrolü
-
----
-
-## 📝 Lisans & Bilgiler
-
-**Veri**: MovieLens 1M Dataset  
-**Proje**: Veri Madenciliği Dersi - 2026  
-**ML Model**: scikit-learn  
-
----
-
-## 💡 İpuçları
-
-✨ En iyi sonuç için:
-- Gerçekçi oy ortalaması gir
-- Eğer 10+ film değerlendirdiysen daha iyi sonuç alırsın
-- Tercih ettiğin türleri seç (çünkü sınırlaması yok!)
-
-🎯 Deneme:
-- İlk kez: Varsayılan ayarlarla deneylendir
-- Sonra: Kendi tercihlerine göre özelleştir
-- Farklı parametreler dene: Hangi kombinasyon en iyisini buldu?
 
 ---
 
