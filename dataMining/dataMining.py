@@ -32,10 +32,13 @@ from sklearn.preprocessing   import StandardScaler
 from sklearn.metrics         import (accuracy_score, classification_report,
                                      confusion_matrix, roc_auc_score)
 from sklearn.base            import BaseEstimator, ClassifierMixin  # OneR için
-from sklearn.dummy           import DummyClassifier          # ZeroR
-from sklearn.neighbors       import KNeighborsClassifier     # KNN
-from sklearn.naive_bayes     import GaussianNB               # Naive Bayes
-from sklearn.tree            import DecisionTreeClassifier   # Decision Tree
+from sklearn.dummy           import DummyClassifier                 # ZeroR
+from sklearn.neighbors       import KNeighborsClassifier            # KNN
+from sklearn.naive_bayes     import GaussianNB                      # Naive Bayes
+from sklearn.tree            import DecisionTreeClassifier          # Decision Tree
+from sklearn.linear_model import LogisticRegression                 # Logistic Regression
+from sklearn.ensemble import RandomForestClassifier                 # Random Forest
+from sklearn.ensemble import GradientBoostingClassifier             # Gradient Boosting
 
 warnings.filterwarnings('ignore')
 
@@ -165,7 +168,7 @@ class OneRClassifier(BaseEstimator, ClassifierMixin):
 banner("1. VERİ YÜKLEME")
 
 # DATA_DIR may be produced by a preprocessing pipeline. Try common locations
-CANDIDATE_DIRS = ['ModelResult', 'ProcessedData']
+CANDIDATE_DIRS = ['ModelResult', 'data/ProcessedData']
 found_dir = None
 for d in CANDIDATE_DIRS:
     if all(os.path.exists(os.path.join(d, f)) for f in ['movies_cleaned.csv', 'ratings_optimized.csv']):
@@ -245,7 +248,7 @@ if len(df) > MAX_SAMPLES:
 
 # Önce split yap
 from sklearn.model_selection import train_test_split as tts_split
-train_df, test_df = tts_split(df, test_size=0.20, random_state=42, stratify=df['liked'])
+train_df, test_df = tts_split(df, test_size=0.25, random_state=42, stratify=df['liked'])
 
 # İstatistikleri SADECE train verisi üzerinden hesapla (data leakage önlemi)
 movie_stats = train_df.groupby('movieId').agg(
@@ -293,18 +296,26 @@ print(f"  CV     : {cv.n_splits}-fold Stratified")
 # 4. ALGORİTMALAR
 # ─────────────────────────────────────────────
 results = []
+model_map = {}   # name -> (fitted_model, needs_scale)
+
+def run_and_register(name, model, needs_scale=False):
+    res = evaluate(name, model, X_train, y_train, X_test, y_test, cv,
+                   needs_scale=needs_scale, sample_weight=w_train)
+    results.append(res)
+    model_map[name] = (model, needs_scale)
+    return model
 
 # ── ALGORİTMA 1: ZeroR ──────────────────────
 banner("ALGORİTMA 1 — ZeroR (Baseline)")
 print("  Strateji: Her zaman eğitim setindeki çoğunluk sınıfını tahmin et.")
 zeror = DummyClassifier(strategy='most_frequent', random_state=42)
-results.append(evaluate("ZeroR", zeror, X_train, y_train, X_test, y_test, cv, sample_weight=w_train))
+run_and_register("ZeroR", zeror)
 
 # ── ALGORİTMA 2: OneR ───────────────────────
 banner("ALGORİTMA 2 — OneR (En İyi Tek Kural)")
 print("  Strateji: En düşük hata oranını veren tek özellik + eşik kuralı.")
 oner = OneRClassifier()
-results.append(evaluate("OneR", oner, X_train, y_train, X_test, y_test, cv, sample_weight=w_train))
+run_and_register("OneR", oner)
 print(f"\n  Seçilen özellik indeksi : {oner.best_feat_}")
 print(f"  Seçilen özellik adı     : {feature_cols[oner.best_feat_]}")
 print(f"  Eşik değeri             : {oner.threshold_:.4f}")
@@ -313,17 +324,13 @@ print(f"  Eşik değeri             : {oner.threshold_:.4f}")
 banner("ALGORİTMA 3 — KNN (K En Yakın Komşu)")
 print("  K=11, metric=minkowski. Özellikler StandardScaler ile ölçeklendi.")
 knn = KNeighborsClassifier(n_neighbors=11, metric='minkowski', n_jobs=-1)
-results.append(evaluate("KNN (k=11)", knn,
-                         X_train, y_train, X_test, y_test, cv,
-                         needs_scale=True, sample_weight=w_train))
+run_and_register("KNN (k=11)", knn, needs_scale=True)
 
 # ── ALGORİTMA 4: Naive Bayes ────────────────
 banner("ALGORİTMA 4 — Naive Bayes (Gaussian)")
 print("  Gaussian NB: sürekli özellikler için normal dağılım varsayımı.")
 nb = GaussianNB()
-results.append(evaluate("Naive Bayes", nb,
-                         X_train, y_train, X_test, y_test, cv,
-                         needs_scale=True, sample_weight=w_train))
+run_and_register("Naive Bayes", nb, needs_scale=True)
 
 # ── ALGORİTMA 5: Decision Tree ──────────────
 banner("ALGORİTMA 5 — Decision Tree")
@@ -334,8 +341,7 @@ dt = DecisionTreeClassifier(
     min_samples_leaf=20,
     random_state=42,
 )
-results.append(evaluate("Decision Tree", dt,
-                         X_train, y_train, X_test, y_test, cv, sample_weight=w_train))
+run_and_register("Decision Tree", dt)
 
 # Önemli özellikler (Decision Tree)
 importances = pd.Series(dt.feature_importances_, index=feature_cols)
@@ -344,6 +350,26 @@ print("\n  En önemli 5 özellik:")
 for feat, val in top5.items():
     bar = '█' * int(val * 60)
     print(f"    {feat:<25} {val:.4f}  {bar}")
+
+# ── ALGORİTMA 6: Logistic Regression ────────
+banner("ALGORİTMA 6 — Logistic Regression")
+logreg = LogisticRegression(max_iter=1000, class_weight='balanced', random_state=42)
+run_and_register("Logistic Regression", logreg, needs_scale=True)
+
+# ── ALGORİTMA 7: Random Forest ──────────────
+banner("ALGORİTMA 7 — Random Forest")
+rf = RandomForestClassifier(
+    n_estimators=200, max_depth=12, min_samples_leaf=10,
+    n_jobs=-1, random_state=42, class_weight='balanced'
+)
+run_and_register("Random Forest", rf)
+
+# ── ALGORİTMA 8: Gradient Boosting ──────────
+banner("ALGORİTMA 8 — Gradient Boosting")
+gb = GradientBoostingClassifier(
+    n_estimators=150, max_depth=3, learning_rate=0.1, random_state=42
+)
+run_and_register("Gradient Boosting", gb)
 
 # ─────────────────────────────────────────────
 # 5. KARŞILAŞTIRMA TABLOSU
@@ -383,8 +409,8 @@ matplotlib.rcParams.update({
     'figure.dpi':         120,
 })
 
-COLORS    = ['#6C8EBF', '#82B366', '#D6A041', '#AE4132', '#7B61C4']
 MODEL_NAMES = res_df.index.tolist()
+COLORS    = ['#6C8EBF', '#82B366', '#D6A041', '#AE4132', '#7B61C4', '#5F9EA0', '#D2691E', '#8A2BE2', '#2E8B57', '#FF6347']
 
 plt.close('all')
 fig = plt.figure(figsize=(18, 14))
@@ -393,7 +419,7 @@ gs  = gridspec.GridSpec(3, 3, figure=fig, hspace=0.45, wspace=0.35)
 
 # ── 6.1 Test Accuracy ──
 ax1 = fig.add_subplot(gs[0, 0])
-bars = ax1.bar(MODEL_NAMES, res_df['accuracy_%'], color=COLORS, edgecolor='white', linewidth=0.8)
+bars = ax1.bar(MODEL_NAMES, res_df['accuracy_%'], color=COLORS[:len(MODEL_NAMES)], edgecolor='white', linewidth=0.8)
 ax1.set_title('Test Accuracy (%)', fontweight='bold')
 ax1.set_ylim(max(0, res_df['accuracy_%'].min() - 5), min(100, res_df['accuracy_%'].max() + 5))
 ax1.set_xticklabels(MODEL_NAMES, rotation=30, ha='right', fontsize=8)
@@ -405,7 +431,7 @@ for b in bars:
 ax2 = fig.add_subplot(gs[0, 1])
 auc_vals  = res_df['auc'].tolist()
 auc_names = MODEL_NAMES
-auc_colors = [COLORS[i] if not np.isnan(v) else '#cccccc' for i, v in enumerate(auc_vals)]
+auc_colors = [COLORS[i % len(COLORS)] if not np.isnan(v) else '#cccccc' for i, v in enumerate(auc_vals)]
 auc_plot  = [v if not np.isnan(v) else 0 for v in auc_vals]
 bars2 = ax2.bar(auc_names, auc_plot, color=auc_colors, edgecolor='white', linewidth=0.8)
 ax2.axhline(0.5, color='red', linestyle='--', linewidth=1, alpha=0.6, label='Random (0.5)')
@@ -420,7 +446,7 @@ for b, v in zip(bars2, auc_vals):
 
 # ── 6.3 CV Accuracy ± std ──
 ax3 = fig.add_subplot(gs[0, 2])
-ax3.bar(MODEL_NAMES, res_df['cv_mean_%'], color=COLORS,
+ax3.bar(MODEL_NAMES, res_df['cv_mean_%'], color=COLORS[:len(MODEL_NAMES)],
         yerr=res_df['cv_std_%'], capsize=5, edgecolor='white', linewidth=0.8,
         error_kw=dict(elinewidth=1.5, ecolor='#444'))
 ax3.set_title('CV Accuracy ± Std (%)', fontweight='bold')
@@ -429,35 +455,29 @@ ax3.set_xticklabels(MODEL_NAMES, rotation=30, ha='right', fontsize=8)
 
 # ── 6.4 Eğitim Süresi ──
 ax4 = fig.add_subplot(gs[1, 0])
-ax4.barh(MODEL_NAMES, res_df['time_sec'], color=COLORS, edgecolor='white', linewidth=0.8)
+ax4.barh(MODEL_NAMES, res_df['time_sec'], color=COLORS[:len(MODEL_NAMES)], edgecolor='white', linewidth=0.8)
 ax4.set_title('Eğitim Süresi (sn)', fontweight='bold')
 ax4.set_xlabel('Saniye')
 for i, v in enumerate(res_df['time_sec']):
     ax4.text(v + 0.001, i, f"{v:.3f}s", va='center', fontsize=8)
 
-# ── 6.5 ROC Eğrileri (proba destekleyen modeller) ──
-ax5 = fig.add_subplot(gs[1, 1:])
-ax5.plot([0, 1], [0, 1], 'k--', linewidth=1, alpha=0.4, label='Random')
+# ── Scaler ve X_test hazırlama ──
+fitted_scalers = {}  # name -> fitted StandardScaler (sadece needs_scale=True olanlar)
+for name, (mdl, needs_scale) in model_map.items():
+    if needs_scale:
+        sc = StandardScaler().fit(X_train)
+        fitted_scalers[name] = sc
 
-
-model_map = {
-    'ZeroR':         (zeror, X_test,                             False),
-    'OneR':          (oner,  X_test,                             False),
-    'KNN (k=11)':    (knn,   StandardScaler().fit(X_train).transform(X_test), False),
-    'Naive Bayes':   (nb,    StandardScaler().fit(X_train).transform(X_test), False),
-    'Decision Tree': (dt,    X_test,                             False),
-}
-# Scalerları doğru şekilde yeniden fit et
-scaler_knn = StandardScaler().fit(X_train)
-scaler_nb  = StandardScaler().fit(X_train)
-model_map['KNN (k=11)']  = (knn, scaler_knn.transform(X_test), False)
-model_map['Naive Bayes'] = (nb,  scaler_nb.transform(X_test),  False)
+def get_X_test_for(name):
+    mdl, needs_scale = model_map[name]
+    return fitted_scalers[name].transform(X_test) if needs_scale else X_test
 
 # Her model için ayrı görselleştirme (ROC + Confusion) ve süre ölçümü
 for mname in MODEL_NAMES:
-    mdl, X_te_plot, _ = model_map[mname]
+    mdl, needs_scale = model_map[mname]
+    X_te_plot = get_X_test_for(mname)
     t_img0 = time.time()
-    fig, axes = plt.subplots(1, 2, figsize=(10, 4))
+    fig_single, axes = plt.subplots(1, 2, figsize=(10, 4))
     # ROC
     try:
         prob = mdl.predict_proba(X_te_plot)[:, 1]
@@ -480,15 +500,21 @@ for mname in MODEL_NAMES:
         axes[1].text(0.5, 0.5, 'Tahmin yapılamadı', ha='center', va='center')
         axes[1].set_title('Confusion N/A')
 
-    fig.suptitle(f'{mname} — ROC & Confusion')
+    fig_single.suptitle(f'{mname} — ROC & Confusion')
     safe_name = mname.replace(' ', '_').replace('(', '').replace(')', '').replace('/', '_')
     out_img = f'{OUTPUT_DIR}/{safe_name}.png'
     plt.savefig(out_img, bbox_inches='tight', dpi=150)
-    plt.close(fig)
+    plt.close(fig_single)
     print(f"  {mname} görselleştirmesi kaydedildi → {out_img}  (süre: {time.time() - t_img0:.3f}s)")
 
-for i, (mname, color) in enumerate(zip(MODEL_NAMES, COLORS)):
-    mdl, X_te_roc, _ = model_map[mname]
+# ── 6.5 ROC Eğrileri (proba destekleyen modeller) ──
+ax5 = fig.add_subplot(gs[1, 1:])
+ax5.plot([0, 1], [0, 1], 'k--', linewidth=1, alpha=0.4, label='Random')
+
+for i, mname in enumerate(MODEL_NAMES):
+    color = COLORS[i % len(COLORS)]
+    mdl, needs_scale = model_map[mname]
+    X_te_roc = get_X_test_for(mname)
     try:
         prob = mdl.predict_proba(X_te_roc)[:, 1]
         fpr, tpr, _ = roc_curve(y_test, prob)
@@ -505,11 +531,10 @@ ax5.legend(fontsize=8, loc='lower right')
 
 # ── 6.6 En İyi Modelin Confusion Matrix ──
 ax6 = fig.add_subplot(gs[2, 0])
-best_model_obj = {'ZeroR': zeror, 'OneR': oner, 'KNN (k=11)': knn,
-                  'Naive Bayes': nb, 'Decision Tree': dt}[best_name]
-best_X_test    = model_map[best_name][1]
+best_mdl, _ = model_map[best_name]
+best_X_test = get_X_test_for(best_name)
 ConfusionMatrixDisplay.from_predictions(
-    y_test, best_model_obj.predict(best_X_test),
+    y_test, best_mdl.predict(best_X_test),
     display_labels=['Beğenmedi', 'Beğendi'],
     colorbar=False, ax=ax6,
     cmap='Blues',
@@ -532,39 +557,33 @@ plt.savefig(f'{OUTPUT_DIR}/model_comparison.png', bbox_inches='tight', dpi=150)
 print(f"  Grafik '{OUTPUT_DIR}/model_comparison.png' olarak kaydedildi.")
 
 # ─────────────────────────────────────────────
-# 7. EN İYİ MODELİ KAYDET (joblib)
+# 7. TÜM MODELLERİ KAYDET (joblib)
 # ─────────────────────────────────────────────
-banner("7. EN İYİ MODELİ KAYDET")
+banner("7. TÜM MODELLERİ KAYDET")
 
 import joblib
+import shutil
 
-# Web'de kullanmak için gerekli her şeyi bir dict içinde sakla:
-#   model        → tahmin yapan nesne
-#   scaler       → (varsa) StandardScaler
-#   feature_cols → özellik sırası (JSON input sıralaması için)
-#   threshold    → liked eşiği
-#   best_name    → model adı
-needs_scaler = best_name in ('KNN (k=11)', 'Naive Bayes')
-export_scaler = scaler_knn if best_name == 'KNN (k=11)' \
-               else scaler_nb if best_name == 'Naive Bayes' \
-               else None
+saved_paths = {}
+for name, (mdl, needs_scale) in model_map.items():
+    safe_name = name.replace(' ', '_').replace('(', '').replace(')', '').replace('/', '_')
+    bundle = {
+        'model':        mdl,
+        'scaler':       fitted_scalers.get(name),   # None ise ölçekleme gerekmiyor
+        'feature_cols': feature_cols,
+        'threshold':    3.5,
+        'name':         name,
+        'accuracy':     float(res_df.loc[name, 'accuracy']),
+        'auc':          float(res_df.loc[name, 'auc']),
+    }
+    path = f'{OUTPUT_DIR}/model_{safe_name}.joblib'
+    joblib.dump(bundle, path)
+    saved_paths[name] = path
+    print(f"  {name:<20} → {path}")
 
-model_bundle = {
-    'model':        best_model_obj,
-    'scaler':       export_scaler,
-    'feature_cols': feature_cols,
-    'threshold':    3.5,
-    'best_name':    best_name,
-    'accuracy':     float(res_df.loc[best_name, 'accuracy']),
-    'auc':          float(res_df.loc[best_name, 'auc']),
-}
-
-model_path = f'{OUTPUT_DIR}/best_model.joblib'
-joblib.dump(model_bundle, model_path)
-print(f"  Model paketi kaydedildi  → {model_path}")
-print(f"  Model adı                : {best_name}")
-print(f"  Test Accuracy            : {res_df.loc[best_name,'accuracy_%']}%")
-print(f"  AUC                      : {res_df.loc[best_name,'auc']}")
+# En iyi modeli ayrıca "best_model.joblib" adıyla da kopyala (web app bunu arıyor olabilir)
+shutil.copyfile(saved_paths[best_name], f'{OUTPUT_DIR}/best_model.joblib')
+print(f"\n  ★ En iyi model ayrıca 'best_model.joblib' olarak kopyalandı → {best_name}")
 
 # ─────────────────────────────────────────────
 # 8. SONUÇLARI CSV KAYDET

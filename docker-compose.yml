@@ -1,0 +1,27 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    container_name: movie_recommendation_backend
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend/database.sqlite:/app/backend/database.sqlite
+      - ./ModelResult:/app/ModelResult
+    environment:
+      - PYTHONUNBUFFERED=1
+    restart: always
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: movie_recommendation_frontend
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    restart: always

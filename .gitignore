@@ -26,9 +26,10 @@ venv/
 ENV/
 
 # Data Files (Ignored as requested)
-RawData/
-ProcessedData/
+data/
 ModelResult/
+database.sqlite
+
 
 # IDEs
 .vscode/

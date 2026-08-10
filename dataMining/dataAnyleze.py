@@ -8,9 +8,9 @@ t0 = time.time()
 
 # ─── VERİYİ YÜKLE ────────────────────────────────────────────────────────────
 try:
-    movies  = pd.read_csv('ProcessedData/movies_cleaned.csv',    dtype={'movieId': 'int32', 'year': 'Int16'})
-    ratings = pd.read_csv('ProcessedData/ratings_optimized.csv', dtype={'userId': 'int32', 'movieId': 'int32', 'rating': 'float32'})
-    tags    = pd.read_csv('ProcessedData/tags_optimized.csv',    dtype={'userId': 'int32', 'movieId': 'int32'})
+    movies  = pd.read_csv('data/ProcessedData/movies_cleaned.csv',    dtype={'movieId': 'int32', 'year': 'Int16'})
+    ratings = pd.read_csv('data/ProcessedData/ratings_optimized.csv', dtype={'userId': 'int32', 'movieId': 'int32', 'rating': 'float32'})
+    tags    = pd.read_csv('data/ProcessedData/tags_optimized.csv',    dtype={'userId': 'int32', 'movieId': 'int32'})
 except FileNotFoundError as e:
     raise SystemExit(f"Dosya bulunamadı: {e}. Önce temizleme scriptini çalıştırın.")
 
@@ -73,7 +73,7 @@ csv_out = pd.concat(
     sort=False
 )
 
-out_path = 'ModelResult/rapor.csv'
+out_path = 'Raport/raport.csv'
 csv_out.to_csv(out_path, index=False, encoding='utf-8-sig')
 
 print(f"[{time.time()-t0:.2f}s] '{out_path}' kaydedildi.")

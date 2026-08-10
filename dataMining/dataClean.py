@@ -43,13 +43,13 @@ t0 = time.time()
 
 try:
     movies = pd.read_csv(
-        'RawData/movies.csv',
+        'data/RawData/movies.csv',
         usecols=['movieId', 'title', 'genres'],
         dtype={'movieId': 'int32'},
     )
 
     ratings = pd.read_csv(
-        'RawData/ratings.csv',
+        'data/RawData/ratings.csv',
         usecols=['userId', 'movieId', 'rating'],  
         dtype={
             'userId':  'int32',
@@ -59,7 +59,7 @@ try:
     )
 
     tags = pd.read_csv(
-        'RawData/tags.csv',
+        'data/RawData/tags.csv',
         usecols=['userId', 'movieId', 'tag'],  
         dtype={
             'userId':  'int32',
@@ -108,15 +108,15 @@ print(f"[{time.time()-t0:.1f}s] Yıl ayıklandı.")
 # 5. ADIM: FİLTRELEME — NumPy masking (isin'den hızlı)
 #   value_counts yerine groupby+size veya np.unique+bincount
 # ─────────────────────────────────────────────
-MIN_RATINGS      = 50   # film başına minimum rating sayısı
-MIN_USER_RATINGS = 20   # kullanıcı başına minimum rating sayısı
-MIN_YEAR         = 1980 # bu yıldan önceki filmler çıkarılır
+MIN_RATINGS      = 10   # film başına minimum rating sayısı
+MIN_USER_RATINGS = 10   # kullanıcı başına minimum rating sayısı
+MIN_YEAR         = 1970 # bu yıldan önceki filmler çıkarılır
 
-# ── 1980 öncesi filmleri çıkar ──────────────────────────────────────────────
+# ── 1970 öncesi filmleri çıkar ──────────────────────────────────────────────
 movies = movies[movies['year'].isna() | (movies['year'] >= MIN_YEAR)].reset_index(drop=True)
 print(f"[{time.time()-t0:.1f}s] {MIN_YEAR} öncesi filmler çıkarıldı — movies:{len(movies):,}")
 
-# ── 10'dan az rating veren kullanıcıları çıkar ──────────────────────────────
+# ── MIN_USER_RATINGS'dan az rating veren kullanıcıları çıkar ──────────────────────────────
 user_ids_arr              = ratings['userId'].to_numpy()
 unique_users, user_counts = np.unique(user_ids_arr, return_counts=True)
 active_user_ids           = unique_users[user_counts >= MIN_USER_RATINGS]
@@ -125,16 +125,23 @@ active_user_set           = set(active_user_ids)
 ratings = ratings[ratings['userId'].isin(active_user_set)].reset_index(drop=True)
 print(f"[{time.time()-t0:.1f}s] Az aktif kullanıcılar çıkarıldı — ratings:{len(ratings):,}")
 
-# ── 20'den az rating alan filmleri çıkar ────────────────────────────────────
+# ── MIN_RATINGS'den az rating alan filmleri çıkar ────────────────────────────────────
 movie_ids_arr  = ratings['movieId'].to_numpy()
 unique_ids, counts = np.unique(movie_ids_arr, return_counts=True)
 popular_movie_ids  = unique_ids[counts >= MIN_RATINGS]
+popular_set        = set(popular_movie_ids)
 
-# Hem ratings/tags hem de movies tablosunu filtrele
-popular_set       = set(popular_movie_ids)           # O(1) lookup
-movies            = movies[movies['movieId'].isin(popular_set)].reset_index(drop=True)
-mask_ratings      = ratings['movieId'].isin(popular_set)
-mask_tags         = tags['movieId'].isin(popular_set)
+# movies tablosunu popülerlik filtresinden geçir (year filtresi zaten uygulanmıştı)
+movies = movies[movies['movieId'].isin(popular_set)].reset_index(drop=True)
+
+# ── ARTIK "geçerli" film ID'leri movies tablosunun KENDİSİ ──────────────────
+# (hem year hem popularity filtresinden geçmiş nihai küme)
+final_movie_ids = set(movies['movieId'])
+
+# ratings ve tags'i bu nihai küme ile filtrele — film silindiyse
+# ona ait rating ve tag (yorum) satırları da silinsin
+mask_ratings = ratings['movieId'].isin(final_movie_ids)
+mask_tags    = tags['movieId'].isin(final_movie_ids)
 
 ratings_optimized = ratings[mask_ratings].reset_index(drop=True)
 tags_optimized    = tags[mask_tags].reset_index(drop=True)
@@ -145,7 +152,7 @@ print(f"[{time.time()-t0:.1f}s] Filtreleme tamamlandı — "
 # ─────────────────────────────────────────────
 # 6. ADIM: KAYDET — chunksize ile bellek dostu yazım
 # ─────────────────────────────────────────────
-CHUNK = 500_000  # 500K satır/parça
+CHUNK = 1_000_000  # 1M satır/parça
 
 def save_csv(df: pd.DataFrame, path: str, chunk: int = CHUNK) -> None:
     """Büyük DataFrame'i parçalı yazar; ilk parça header içerir."""
@@ -159,11 +166,11 @@ def save_csv(df: pd.DataFrame, path: str, chunk: int = CHUNK) -> None:
         )
         mode = 'a'  # sonraki parçalar ekler
 
-save_csv(movies,            'ProcessedData/movies_cleaned.csv')
-save_csv(ratings_optimized, 'ProcessedData/ratings_optimized.csv')
-save_csv(tags_optimized,    'ProcessedData/tags_optimized.csv')
+save_csv(movies,            'data/ProcessedData/movies_cleaned.csv')
+save_csv(ratings_optimized, 'data/ProcessedData/ratings_optimized.csv')
+save_csv(tags_optimized,    'data/ProcessedData/tags_optimized.csv')
 
-print(f"[{time.time()-t0:.1f}s] Tüm veriler 'ProcessedData/' klasörüne kaydedildi.")
+print(f"[{time.time()-t0:.1f}s] Tüm veriler 'data/ProcessedData/' klasörüne kaydedildi.")
 
 # ─────────────────────────────────────────────
 # 7. ADIM: ÖZET RAPOR

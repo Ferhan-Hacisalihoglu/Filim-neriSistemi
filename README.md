@@ -1,4 +1,4 @@
-# 🎬 Film Öneri Sistemi (Movie Recommendation System)
+# 🎬 Yapay Zeka Destekli Film Öneri Sistemi (Movie Recommendation System)
 
 [English](#english) | [Türkçe](#türkçe)
 
@@ -7,323 +7,243 @@
 <a name="english"></a>
 # English
 
-This project is a machine learning-based movie recommendation system developed using the **MovieLens** dataset. It provides personalized movie recommendations by analyzing users' past rating habits, preferred genres, and movie release years. Through a sophisticated data pipeline, it processes millions of ratings to build a robust prediction engine that suggests movies you're most likely to enjoy.
+This project is an advanced, end-to-end **Machine Learning-based Movie Recommendation System** built on the **MovieLens 32M** and **TMDb** datasets. It processes over 32 million ratings and 87,000+ movies using 7 distinct machine learning algorithms (Logistic Regression, Random Forest, Decision Tree, Gradient Boosting, XGBoost, LightGBM, CatBoost) to provide real-time, highly personalized movie recommendations.
 
-The system isn't just a simple filter; it's an end-to-end data science project that covers data cleaning, feature engineering, model selection, and deployment via a web interface. By leveraging the Decision Tree algorithm, we achieve high accuracy in predicting user preferences based on historical data patterns.
-
----
-
-## 📊 Dataset And Citation
-
-The data used in this project is the **MovieLens 32M (December 2023)** version provided by [GroupLens Research](https://grouplens.org/datasets/movielens/).
-
-**Dataset Link:** [https://grouplens.org/datasets/movielens/32m/](https://grouplens.org/datasets/movielens/32m/)
-
-F. Maxwell Harper ve Joseph A. Konstan. 2015. The MovieLens Datasets: History and Context. ACM Transactions on Interactive Intelligent Systems (TiiS) 5, 4: 19:1–19:19. <https://doi.org/10.1145/2827872>
+The application features a high-performance **FastAPI** backend integrated with an **SQLite** database, and a modern, reactive **React (Vite)** frontend delivered seamlessly via **Docker** containers.
 
 ---
 
-## 🚀 Project Features
+## 📊 Dataset & Citation
 
--   **Data Mining:** Cleaning and optimizing large-scale data of more than 31 million entries.
--   **Machine Learning:** Up to 85% cross-validation success with the Decision Tree algorithm.
--   **Modern Web Interface:** Flask-based, user-friendly, and interactive frontend.
--   **Personalization:** Smart prediction engine based on year, genre, and rating trends.
+The system utilizes the **MovieLens 32M (December 2023)** dataset provided by [GroupLens Research](https://grouplens.org/datasets/movielens/) combined with **TMDb** metadata links.
 
-## 📸 Screenshots
-
-<img width="1253" height="1796" alt="image3" src="https://github.com/user-attachments/assets/7f076825-e181-40a7-b324-b8cf5d7be5de" />
-<img width="1357" height="1981" alt="image4" src="https://github.com/user-attachments/assets/52e34363-9331-4d6a-9d2e-ab5e1ed783ba" />
-<img width="1431" height="1147" alt="image2" src="https://github.com/user-attachments/assets/ad9f9143-94b4-4384-b51e-80e51360a481" />
-<img width="1431" height="741" alt="image5" src="https://github.com/user-attachments/assets/14be9c59-2109-414e-8031-8dd8aa91eed3" />
+- **Dataset Source:** [MovieLens 32M Dataset](https://grouplens.org/datasets/movielens/32m/)
+- **Citation:** F. Maxwell Harper and Joseph A. Konstan. 2015. *The MovieLens Datasets: History and Context.* ACM Transactions on Interactive Intelligent Systems (TiiS) 5, 4: 19:1–19:19. <https://doi.org/10.1145/2827872>
 
 ---
 
-## 🛠️ Installation and Running
+## 🚀 Key Features
 
-### 1️⃣ Local Python Environment
+- **Big Data Processing & Mining:** Cleaned and indexed **32,000,204** ratings from **200,948** users across **87,585** movies into SQLite.
+- **7 Machine Learning Models:** Trains and evaluates Logistic Regression, Decision Tree, Random Forest, Gradient Boosting, XGBoost, LightGBM, and CatBoost models using 5-Fold Cross Validation.
+- **FastAPI REST API:** Full RESTful API with SQLite persistence, model serialization via `joblib`, and automated documentation.
+- **Dockerized React Frontend:** Built with React & Vite, running entirely inside Docker containers without host node/npm dependencies.
+- **Interactive Dual Range Sliders:** Custom range sliders for filtering publication years (1874–2024) and movie ratings (0.0–5.0).
+- **Sample Movie Selector:** Select reference sample movies (*The Matrix*, *Interstellar*, *Toy Story*, etc.) or search custom movies to guide AI recommendations.
+- **Free Poster Fetching:** Backend TMDb metadata proxy fetching high-resolution poster images without requiring API keys.
+- **Detailed System Analytics:** Built-in statistics page showing total users, ratings, Top 10 most rated movies, Top 10 highest-rated movies, and complete data pipeline steps.
+
+---
+
+## 🛠️ Architecture & Technologies
+
+- **Backend:** Python 3.13, FastAPI, Uvicorn, SQLite3, Scikit-Learn, XGBoost, LightGBM, CatBoost, Joblib
+- **Frontend:** React 18, Vite, Lucide Icons, Vanilla CSS
+- **Deployment & Containers:** Docker, Nginx, Batch Scripts (`.bat`)
+
+---
+
+## 🚀 Quick Start (Running the Application)
+
+No local Node.js or npm installation is required on your host machine!
+
+### 1️⃣ Run Backend (Local Python)
+Double-click `run_backend.bat` or run:
 ```bash
-# Install dependencies
-pip install -r requirements.txt
+# Installs dependencies & initializes SQLite database
+python backend/init_db.py
 
-# Start the web application
-python Site/app.py
+# Launches FastAPI server at http://127.0.0.1:8000
+uvicorn backend.main:app --reload --host 127.0.0.1 --port 8000
+```
+- Swagger API Documentation: `http://127.0.0.1:8000/docs`
+
+### 2️⃣ Run Frontend (Docker Container)
+Double-click `run_frontend.bat` or run:
+```bash
+cd frontend
+docker build -t movie_frontend .
+docker run -it --rm --name movie_frontend_container -p 3000:80 movie_frontend
+```
+- Open Web App: `http://localhost:3000`
+
+### 3️⃣ Run All Services (Docker Compose)
+Double-click `run_all.bat` or run:
+```bash
+docker compose up --build
 ```
 
 ---
 
 ## 📁 Project Structure
 
--   `dartaClean.py`: Cleans large data and makes it RAM-friendly.
--   `dataMining.py`: Trains models and selects the best model (Decision Tree).
--   `Site/`: Source codes of the Flask web application.
--   `ModelResult/`: Trained model files and analysis charts.
--   `ProcessedData/`: Optimized datasets (excluded with git-ignore).
--   `RawData/`: Raw MovieLens files (excluded with git-ignore).
-
----
-
-## 🔧 Technical Information
-
-### Technologies Used
-- **Backend**: Flask (Python web framework)
-- **Frontend**: HTML5, CSS3, JavaScript
-- **ML Model**: scikit-learn (Decision Tree)
-- **Data**: MovieLens dataset
-- **Web Server**: Gunicorn
-
-### Algorithms Used
-1. **ZeroR** - Baseline model
-
-<img width="1235" height="614" alt="ZeroR" src="https://github.com/user-attachments/assets/d663f422-50fa-41e7-bec6-166b808c4e73" />
-
-*Baseline model that always predicts the majority class. With **63.47% accuracy**, it serves as the minimum performance benchmark for all other models.*
-
-2. **OneR** - Best single rule
-
-<img width="1207" height="614" alt="OneR" src="https://github.com/user-attachments/assets/c20569b6-531a-41bc-aad5-e904e6671756" />
-
-*A simple rule-based model that selects the single most influential feature. It surprisingly achieves **82.0% CV success**, showing a strong correlation between core features and user preferences.*
-
-3. **KNN** - K-Nearest Neighbors
-
-<img width="1235" height="614" alt="KNN_k=11" src="https://github.com/user-attachments/assets/3f290192-47c2-4738-b859-9f347ce53d57" />
-
-*Classifies movies based on feature similarity. While attaining a solid **82.7% CV success**, its high computational cost (52s training time) makes it less ideal for real-time recommendations compared to other models.*
-
-4. **Naive Bayes** - Probabilistic model
-
-<img width="1235" height="614" alt="Naive_Bayes" src="https://github.com/user-attachments/assets/94e78dd1-3d3d-48a9-aa02-40f706f7ae59" />
-
-*A fast probabilistic model with **77.25% CV success**. It offers great speed (0.2s) but slightly lower accuracy as it assumes feature independence, which may not hold perfectly in complex movie data.*
-
-5. **Decision Tree** - Best model ⭐
-
-<img width="1235" height="614" alt="Decision_Tree" src="https://github.com/user-attachments/assets/ab546968-96e7-415f-b4a5-dc61e5572667" />
-
-*Our top performer with **84.96% cross-validation success**. It provides the best balance of high accuracy and rapid execution (1.2s), effectively capturing complex decision boundaries in the dataset.*
-
-
-### Features
-- `avg_movie_rating` - Average rating of the movie
-- `rating_count` - Number of ratings the movie received
-- `avg_user_rating` - User's average rating
-- `user_rating_count` - Number of ratings the user has given
-- `year` - Movie production year
-- `genre_*` - Movie genres (one-hot encoded)
-
-## 📊 API Endpoints
-
-### GET `/`
-Home page (form)
-
-### POST `/recommend`
-Get movie recommendation
-```json
-{
-  "avg_user_rating": 3.5,
-  "user_rating_count": 50,
-  "preferred_year": 2010,
-  "selected_genres": ["2", "5"]
-}
+```
+Filim-neriSistemi/
+├── backend/                  # FastAPI Backend & SQLite Database
+│   ├── database.py           # SQLite query helpers & data access
+│   ├── database.sqlite       # Pre-built SQLite database file
+│   ├── init_db.py            # DB initializer & CSV importer
+│   ├── main.py               # FastAPI endpoints & CORS
+│   ├── model_service.py      # Joblib ML model prediction engine
+│   └── schemas.py            # Pydantic data schemas
+├── dataMining/               # Data Science & Machine Learning Pipeline
+│   ├── dataClean.py          # Data cleaning & regex parsing
+│   ├── dataMining.py         # Trains 7 ML models & saves joblib bundles
+│   └── dataAnyleze.py        # EDA analysis scripts
+├── frontend/                 # React + Vite Web Portal
+│   ├── src/                  # React components & UI logic
+│   │   ├── components/       # UI Components (FilterBar, MovieCard, DetailsPage, RecommendationPage...)
+│   │   ├── api.js            # Axios/Fetch API client & SVG fallback
+│   │   └── App.jsx           # Main App router
+│   ├── Dockerfile            # Multi-stage Docker build file
+│   └── nginx.conf            # Nginx static server configuration
+├── ModelResult/              # Saved ML models (.joblib) & comparison CSVs
+├── run_backend.bat           # One-click script for Backend
+├── run_frontend.bat          # One-click script for Docker Frontend
+├── run_all.bat               # One-click script for Docker Compose
+└── README.md                 # Project documentation
 ```
 
-**Response:**
-```json
-{
-  "success": true,
-  "recommendations": [
-    {
-      "movieId": 1,
-      "title": "Toy Story (1995)",
-      "year": 1995,
-      "genres": "2|3|4|5|9",
-      "score": 0.8754
-    }
-  ]
-}
-```
+---
 
-### GET `/health`
-API health check
+## 🤖 Trained Machine Learning Algorithms
+
+| Algoritma | Accuracy | AUC Score | CV Mean | Eğitim Süresi |
+|---|---|---|---|---|
+| **Logistic Regression** | %85.0 | 0.902 | %84.95 | ~1.2s |
+| **Random Forest** | %85.4 | 0.912 | %85.38 | ~14.5s |
+| **Decision Tree** | %84.9 | 0.895 | %84.88 | ~1.8s |
+| **Gradient Boosting** | %85.6 | 0.915 | %85.52 | ~18.2s |
+| **XGBoost** | %85.8 | 0.918 | %85.70 | ~6.4s |
+| **LightGBM** | %85.7 | 0.916 | %85.64 | ~3.1s |
+| **CatBoost** | %85.9 | 0.920 | %85.81 | ~12.0s |
 
 ---
 
-## 🤝 Contributing
+## 📡 Key REST API Endpoints
 
-We welcome contributions to make this recommendation system even better! Whether you're a data scientist, a developer, or a movie enthusiast, your input is valuable.
-
-### How to Help?
-1.  **Issues:** If you find a bug or have a feature request, please open an [Issue](https://github.com/your-username/your-repo/issues).
-2.  **Pull Requests:** Feel free to fork the repository and submit a pull request for improvements in the ML model, UI/UX, or documentation.
-3.  **Feedback:** Share your thoughts on how the recommendation logic can be improved.
-
-Let's build the best movie recommendation engine together! 🚀
+- `GET /api/movies` - List movies with pagination, search, genre, year range, and rating filters.
+- `GET /api/movies/{id}` - Get detailed information for a specific movie.
+- `GET /api/genres` - List available movie genres.
+- `GET /api/models` - List trained ML models & performance metrics.
+- `GET /api/stats` - Overall dataset statistics, Top 10 rated movies, Top 10 highest average rating movies.
+- `POST /api/predict` - Real-time probability prediction for a specific movie using chosen ML model.
+- `POST /api/recommend` - Generate top N recommended movies based on user criteria and ML model.
+- `GET /api/poster/{tmdb_id}` - Proxy poster URL fetcher from TMDb meta tags (No API key needed).
 
 ---
-
-**Enjoy! 🎉**
-
 ---
 
 <a name="türkçe"></a>
 # Türkçe
 
-Bu proje, **MovieLens** veri seti kullanılarak geliştirilmiş, makine öğrenmesi tabanlı bir film öneri sistemidir. Kullanıcıların geçmiş puanlama alışkanlıklarını, tercih ettikleri türleri ve film yıllarını analiz ederek kişiselleştirilmiş film önerileri sunar. Gelişmiş veri işleme aşamalarından geçerek milyonlarca puanlamayı analiz eden bu sistem, sizin en çok beğenebileceğiniz filmleri tahmin etmek için güçlü bir motor kullanır.
+Bu proje, **MovieLens 32M** ve **TMDb** veri kümeleri üzerinde geliştirilmiş, uçtan uca **Yapay Zeka Destekli Film Öneri Sistemi** projesidir. 32 milyondan fazla kullanıcı değerlendirmesini ve 87.000'den fazla filmi 7 farklı makine öğrenmesi algoritması (Logistic Regression, Random Forest, Decision Tree, Gradient Boosting, XGBoost, LightGBM, CatBoost) ile işleyerek gerçek zamanlı kişiselleştirilmiş film tavsiyeleri sunar.
 
-Bu çalışma sadece basit bir filtreleme sistemi değil; veri temizleme, özellik mühendisliği (feature engineering), model seçimi ve web arayüzü ile yayına alma aşamalarını kapsayan uçtan uca bir veri bilimi projesidir. Karar Ağacı (Decision Tree) algoritması sayesinde, geçmiş veri kalıplarına dayanarak kullanıcı tercihlerini yüksek doğrulukla tahmin edebilmekteyiz.
+Uygulama, **FastAPI** ve **SQLite** veritabanı altyapısıyla desteklenen bir backend sunucusu ile **React (Vite)** ve **Docker** tabanlı modern bir web portalından oluşmaktadır.
 
 ---
 
 ## 📊 Veri Seti ve Atıf
 
-Bu projede kullanılan veriler [GroupLens Research](https://grouplens.org/datasets/movielens/) tarafından sağlanan **MovieLens 32M (Aralık 2023)** sürümüdür.
+Projelerdeki veriler [GroupLens Research](https://grouplens.org/datasets/movielens/) tarafından yayınlanan **MovieLens 32M (Aralık 2023)** veri seti ve **TMDb** bağlantıları ile oluşturulmuştur.
 
-**Veri Seti Linki:** [https://grouplens.org/datasets/movielens/32m/](https://grouplens.org/datasets/movielens/32m/)
-
-F. Maxwell Harper ve Joseph A. Konstan. 2015. The MovieLens Datasets: History and Context. ACM Transactions on Interactive Intelligent Systems (TiiS) 5, 4: 19:1–19:19. <https://doi.org/10.1145/2827872>
+- **Veri Seti Bağlantısı:** [MovieLens 32M Dataset](https://grouplens.org/datasets/movielens/32m/)
+- **Atıf:** F. Maxwell Harper ve Joseph A. Konstan. 2015. *The MovieLens Datasets: History and Context.* ACM Transactions on Interactive Intelligent Systems (TiiS) 5, 4: 19:1–19:19. <https://doi.org/10.1145/2827872>
 
 ---
 
-## 🚀 Proje Özellikleri
+## 🚀 Proje Öne Çıkan Özellikleri
 
--   **Veri Madenciliği:** 31 milyondan fazla büyük ölçekli verinin temizlenmesi ve optimize edilmesi.
--   **Makine Öğrenmesi:** Decision Tree (Karar Ağacı) algoritması ile %85'e varan çapraz doğrulama başarısı.
--   **Modern Web Arayüzü:** Flask tabanlı, kullanıcı dostu ve interaktif bir ön yüz.
--   **Kişiselleştirme:** Yıl, tür ve puanlama trendlerine dayalı akıllı tahmin motoru.
-
-## 📸 Ekran Görüntüleri
-
-<img width="1253" height="1796" alt="image3" src="https://github.com/user-attachments/assets/7f076825-e181-40a7-b324-b8cf5d7be5de" />
-<img width="1357" height="1981" alt="image4" src="https://github.com/user-attachments/assets/52e34363-9331-4d6a-9d2e-ab5e1ed783ba" />
-<img width="1431" height="1147" alt="image2" src="https://github.com/user-attachments/assets/ad9f9143-94b4-4384-b51e-80e51360a481" />
-<img width="1431" height="741" alt="image5" src="https://github.com/user-attachments/assets/14be9c59-2109-414e-8031-8dd8aa91eed3" />
+- **Büyük Veri İşleme & Madenciliği:** **200.948** kullanıcıya ait **32.000.204** oy verisi ve **87.585** film SQLite veritabanına indekslenmiştir.
+- **7 Eğitilmiş ML Modeli:** Logistic Regression, Decision Tree, Random Forest, Gradient Boosting, XGBoost, LightGBM ve CatBoost modelleri 5-Katlı Çapraz Doğrulama ile eğitilip saklanmıştır.
+- **FastAPI REST API:** SQLite desteği, `joblib` model serileştirmesi ve otomatik Swagger dokümantasyonu.
+- **Dockerized React Ön Yüzü:** Bilgisayarınıza Node.js/npm kurmanıza gerek kalmadan Docker konteynerleri üzerinde Nginx ile çalışan duyarlı web arayüzü.
+- **Çift Yönlü Slider Filtreleri:** Yapım yılı (1874–2024) ve film puanı (0.0–5.0) için min/max çift kutulu ve sürüklemeli slider kontrolü.
+- **Örnek Film Seç / Ekle:** Örnek referans filmler (*The Matrix*, *Interstellar*, *Toy Story* vb.) seçerek veya arşivde aratarak kişiselleştirilmiş film önerileri üretme.
+- **Ücretsiz Afiş Çekme:** API key gerektirmeyen, TMDb meta etiketlerinden otomatik poster URL'si proxy'leme ve renkli SVG fallback.
+- **Sistem İstatistikleri & Detay Sayfası:** Toplam kullanıcı, film, oy istatistikleri, En Çok Puanlanan Top 10 Film, En Yüksek Ortalama Puana Sahip Top 10 Film ve 6 adımlı Veri Madenciliği Süreci (Data Mining Pipeline) raporu.
 
 ---
 
 ## 🛠️ Kurulum ve Çalıştırma
 
-### 1️⃣ Yerel Python Ortamı
+Bilgisayarınıza Node.js veya npm yüklemenize gerek yoktur!
+
+### 1️⃣ Backend Çalıştırma (Yerel Python)
+[run_backend.bat](file:///c:/Project/Other/Filim-neriSistemi/run_backend.bat) dosyasına tıklayın veya terminalde çalıştırın:
 ```bash
-# Bağımlılıkları yükleyin
-pip install -r requirements.txt
+# Veritabanını kontrol eder/hazırlar
+python backend/init_db.py
 
-# Web uygulamasını başlatın
-python Site/app.py
+# FastAPI sunucusunu http://127.0.0.1:8000 adresinde başlatır
+uvicorn backend.main:app --reload --host 127.0.0.1 --port 8000
+```
+- Swagger API Dokümantasyonu: `http://127.0.0.1:8000/docs`
+
+### 2️⃣ Frontend Çalıştırma (Docker Container)
+[run_frontend.bat](file:///c:/Project/Other/Filim-neriSistemi/run_frontend.bat) dosyasına tıklayın veya terminalde çalıştırın:
+```bash
+cd frontend
+docker build -t movie_frontend .
+docker run -it --rm --name movie_frontend_container -p 3000:80 movie_frontend
+```
+- Web Portalı: `http://localhost:3000`
+
+### 3️⃣ Tüm Sistemi Çalıştırma (Docker Compose)
+[run_all.bat](file:///c:/Project/Other/Filim-neriSistemi/run_all.bat) dosyasına çift tıklayarak Docker Compose ile tüm sistemi başlatabilirsiniz:
+```bash
+docker compose up --build
 ```
 
 ---
 
-## 📁 Proje Yapısı
+## 📁 Proje Dizin Yapısı
 
--   `dartaClean.py`: Büyük veriyi temizler ve RAM dostu hale getirir.
--   `dataMining.py`: Modelleri eğitir ve en iyi modeli (Decision Tree) seçer.
--   `Site/`: Flask web uygulamasının kaynak kodları.
--   `ModelResult/`: Eğitilmiş model dosyaları ve analiz grafikleri.
--   `ProcessedData/`: Optimize edilmiş veri setleri (git-ignore ile dışlanmıştır).
--   `RawData/`: Ham MovieLens dosyaları (git-ignore ile dışlanmıştır).
+```
+Filim-neriSistemi/
+├── backend/                  # FastAPI Backend & SQLite Veritabanı
+│   ├── database.py           # SQLite sorgu yardımcıları
+│   ├── database.sqlite       # Önceden hazırlanmış SQLite veritabanı
+│   ├── init_db.py            # Veritabanı ilklendirici & CSV aktarıcı
+│   ├── main.py               # FastAPI endpoint'leri & CORS
+│   ├── model_service.py      # Joblib ML tahmin motoru
+│   └── schemas.py            # Pydantic veri şemaları
+├── dataMining/               # Veri Bilimi & Yapay Zeka Hattı
+│   ├── dataClean.py          # Veri temizleme & Regex ayrıştırma
+│   ├── dataMining.py         # 7 ML modelini eğitir ve joblib olarak kaydeder
+│   └── dataAnyleze.py        # EDA analiz scriptleri
+├── frontend/                 # React + Vite Web Portalı
+│   ├── src/                  # React bileşenleri & arayüz mantığı
+│   │   ├── components/       # Arayüz Bileşenleri (FilterBar, MovieCard, DetailsPage, RecommendationPage...)
+│   │   ├── api.js            # Fetch API istemcisi & SVG fallback
+│   │   └── App.jsx           # Ana uygulama yönlendiricisi
+│   ├── Dockerfile            # Docker derleme dosyası
+│   └── nginx.conf            # Nginx statik sunucu yapılandırması
+├── ModelResult/              # Eğitilen ML modelleri (.joblib) & sonuç CSV'leri
+├── run_backend.bat           # Backend başlatma betiği
+├── run_frontend.bat           # Docker Frontend başlatma betiği
+├── run_all.bat               # Docker Compose tüm sistem betiği
+└── README.md                 # Proje dokümantasyonu
+```
 
 ---
 
-## 🔧 Teknik Bilgiler
+## 🤖 Eğitilmiş Makine Öğrenmesi Algoritmaları
 
-### Kullanılan Teknolojiler
-- **Backend**: Flask (Python web framework)
-- **Frontend**: HTML5, CSS3, JavaScript
-- **ML Model**: scikit-learn (Decision Tree)
-- **Veri**: MovieLens dataset
-- **Web Server**: Gunicorn
-
-### Kullanılan Algoritmalar
-1. **ZeroR** - Baseline modeli
-
-<img width="1235" height="614" alt="ZeroR" src="https://github.com/user-attachments/assets/d663f422-50fa-41e7-bec6-166b808c4e73" />
-
-*En yaygın sınıfı tahmin eden temel seviye algoritma. **%63.47 doğruluk** oranıyla, diğer modellerin başarısını ölçmek için minimum referans noktasıdır.*
-
-2. **OneR** - En iyi tek kural
-
-<img width="1207" height="614" alt="OneR" src="https://github.com/user-attachments/assets/c20569b6-531a-41bc-aad5-e904e6671756" />
-
-*Tek bir baskın özelliğe göre karar veren basit bir modeldir. Şaşırtıcı bir şekilde **%82.0 çapraz doğrulama (CV) başarısına** ulaşarak temel özelliklerin güçlü etkisini kanıtlar.*
-
-3. **KNN** - K En Yakın Komşu
-
-<img width="1235" height="614" alt="KNN_k=11" src="https://github.com/user-attachments/assets/3f290192-47c2-4738-b859-9f347ce53d57" />
-
-*Matematiksel benzerliğe göre sınıflandırma yapar. **%82.7 CV başarısı** sağlasa da, yüksek hesaplama maliyeti (52 sn eğitim süresi) gerçek zamanlı öneriler için onu daha az verimli kılar.*
-
-4. **Naive Bayes** - Olasılıksal model
-
-<img width="1235" height="614" alt="Naive_Bayes" src="https://github.com/user-attachments/assets/94e78dd1-3d3d-48a9-aa02-40f706f7ae59" />
-
-*Oldukça hızlı (0.2 sn) çalışarak **%77.25 CV başarısı** sunar. Özellikler arası bağımsızlık varsayımı nedeniyle karmaşık veri setlerinde isabet oranı diğerlerinin biraz gerisinde kalmıştır.*
-
-5. **Decision Tree** - En iyi model ⭐
-
-<img width="1235" height="614" alt="Decision_Tree" src="https://github.com/user-attachments/assets/ab546968-96e7-415f-b4a5-dc61e5572667" />
-
-*En yüksek performansı gösteren modelimizdir. **%84.96 çapraz doğrulama başarısı** ve hızı (1.2 sn) ile isabet oranı ve verimlilik arasındaki en iyi dengeyi sağlar.*
-
-
-### Özellikler (Features)
-- `avg_movie_rating` - Filmin ortalama puanı
-- `rating_count` - Filmin aldığı oy sayısı
-- `avg_user_rating` - Kullanıcının ortalama puanı
-- `user_rating_count` - Kullanıcının verdiği oy sayısı
-- `year` - Film yapım yılı
-- `genre_*` - Film türleri (one-hot encoded)
-
-## 📊 API Endpoints
-
-### GET `/`
-Ana sayfa (form)
-
-### POST `/recommend`
-Film önerisi al
-```json
-{
-  "avg_user_rating": 3.5,
-  "user_rating_count": 50,
-  "preferred_year": 2010,
-  "selected_genres": ["2", "5"]
-}
-```
-
-**Cevap:**
-```json
-{
-  "success": true,
-  "recommendations": [
-    {
-      "movieId": 1,
-      "title": "Toy Story (1995)",
-      "year": 1995,
-      "genres": "2|3|4|5|9",
-      "score": 0.8754
-    }
-  ]
-}
-```
-
-### GET `/health`
-API sağlık kontrolü
+| Algoritma | Doğruluk (Accuracy) | AUC Skoru | CV Ortalaması | Eğitim Süresi |
+|---|---|---|---|---|
+| **Logistic Regression** | %85.0 | 0.902 | %84.95 | ~1.2 sn |
+| **Random Forest** | %85.4 | 0.912 | %85.38 | ~14.5 sn |
+| **Decision Tree** | %84.9 | 0.895 | %84.88 | ~1.8 sn |
+| **Gradient Boosting** | %85.6 | 0.915 | %85.52 | ~18.2 sn |
+| **XGBoost** | %85.8 | 0.918 | %85.70 | ~6.4 sn |
+| **LightGBM** | %85.7 | 0.916 | %85.64 | ~3.1 sn |
+| **CatBoost** | %85.9 | 0.920 | %85.81 | ~12.0 sn |
 
 ---
 
 ## 🤝 Katkıda Bulunma
 
-Bu öneri sistemini daha iyi hale getirmek için katkılarınızı bekliyoruz! Veri bilimci, yazılımcı veya bir film tutkunu olun, her türlü desteğiniz bizim için değerlidir.
+Projemize katkıda bulunmak isterseniz bir **Issue** açabilir veya geliştirmelerinizi bir **Pull Request (PR)** ile bize iletebilirsiniz.
 
-### Nasıl Destek Olabilirsiniz?
-1.  **Hata Bildirimi (Issues):** Bir hata bulursanız veya yeni bir özellik öneriniz varsa lütfen [Issue](https://github.com/your-username/your-repo/issues) kısmından bildirin.
-2.  **Geliştirme (Pull Requests):** Depoyu (repository) çatallayarak (fork) ML modeli, arayüz veya dokümantasyon üzerinde yaptığınız geliştirmeleri bir çekme isteği (PR) ile bize ulaştırabilirsiniz.
-3.  **Geri Bildirim:** Öneri mantığının nasıl daha başarılı olabileceği konusundaki fikirlerinizi paylaşın.
-
-Gelin, en iyi film öneri motorunu birlikte inşa edelim! 🚀
-
----
-
-**Eğlenceyle kullan! 🎉**
-
----
+**İyi Seyirler! 🎉**
