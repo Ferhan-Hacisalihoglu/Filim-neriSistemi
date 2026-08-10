@@ -7,7 +7,7 @@
 <a name="english"></a>
 # English
 
-This project is an advanced, end-to-end **Machine Learning-based Movie Recommendation System** built on the **MovieLens 32M** and **TMDb** datasets. It processes over 32 million ratings and 87,000+ movies using 7 distinct machine learning algorithms (Logistic Regression, Random Forest, Decision Tree, Gradient Boosting, XGBoost, LightGBM, CatBoost) to provide real-time, highly personalized movie recommendations.
+This project is an advanced, end-to-end **Machine Learning-based Movie Recommendation System** built on the **MovieLens 32M** and **TMDb** datasets. It processes over 32 million ratings and 27,000+ movies using 7 distinct machine learning algorithms (Logistic Regression, Random Forest, Decision Tree, Gradient Boosting, XGBoost, LightGBM, CatBoost) to provide real-time, highly personalized movie recommendations.
 
 The application features a high-performance **FastAPI** backend integrated with an **SQLite** database, and a modern, reactive **React (Vite)** frontend delivered seamlessly via **Docker** containers.
 
@@ -120,6 +120,16 @@ Filim-neriSistemi/
 
 ---
 
+
+## 📸 Screenshots
+
+<img width="1902" height="994" alt="Screenshot 2026-08-10 at 19-18-59 Film Öneri Sistemi — Yapay Zeka Film Portalı" src="https://github.com/user-attachments/assets/5371efbe-e4dd-42cb-868f-be72752a4f7c" />
+<img width="1902" height="2681" alt="Screenshot 2026-08-10 at 19-17-45 Film Öneri Sistemi — Yapay Zeka Film Portalı" src="https://github.com/user-attachments/assets/e755418f-fb57-4edd-8330-1d6e5cc953ba" />
+<img width="1902" height="2392" alt="Screenshot 2026-08-10 at 19-18-39 Film Öneri Sistemi — Yapay Zeka Film Portalı" src="https://github.com/user-attachments/assets/9d1673dd-f9f0-4744-a5fb-02f563b67806" />
+<img width="1902" height="3394" alt="Screenshot 2026-08-10 at 19-18-53 Film Öneri Sistemi — Yapay Zeka Film Portalı" src="https://github.com/user-attachments/assets/082a079d-4250-4df7-8a07-451d7b22d64e" />
+
+---
+
 ## 📡 Key REST API Endpoints
 
 - `GET /api/movies` - List movies with pagination, search, genre, year range, and rating filters.
@@ -137,7 +147,7 @@ Filim-neriSistemi/
 <a name="türkçe"></a>
 # Türkçe
 
-Bu proje, **MovieLens 32M** ve **TMDb** veri kümeleri üzerinde geliştirilmiş, uçtan uca **Yapay Zeka Destekli Film Öneri Sistemi** projesidir. 32 milyondan fazla kullanıcı değerlendirmesini ve 87.000'den fazla filmi 7 farklı makine öğrenmesi algoritması (Logistic Regression, Random Forest, Decision Tree, Gradient Boosting, XGBoost, LightGBM, CatBoost) ile işleyerek gerçek zamanlı kişiselleştirilmiş film tavsiyeleri sunar.
+Bu proje, **MovieLens 32M** ve **TMDb** veri kümeleri üzerinde geliştirilmiş, uçtan uca **Yapay Zeka Destekli Film Öneri Sistemi** projesidir. 32 milyondan fazla kullanıcı değerlendirmesini ve 27.000'den fazla filmi 7 farklı makine öğrenmesi algoritması (Logistic Regression, Random Forest, Decision Tree, Gradient Boosting, XGBoost, LightGBM, CatBoost) ile işleyerek gerçek zamanlı kişiselleştirilmiş film tavsiyeleri sunar.
 
 Uygulama, **FastAPI** ve **SQLite** veritabanı altyapısıyla desteklenen bir backend sunucusu ile **React (Vite)** ve **Docker** tabanlı modern bir web portalından oluşmaktadır.
 
@@ -242,8 +252,22 @@ Filim-neriSistemi/
 
 ---
 
-## 🤝 Katkıda Bulunma
+## 📸 Ekran Görüntüleri
 
-Projemize katkıda bulunmak isterseniz bir **Issue** açabilir veya geliştirmelerinizi bir **Pull Request (PR)** ile bize iletebilirsiniz.
+<img width="1902" height="994" alt="Screenshot 2026-08-10 at 19-18-59 Film Öneri Sistemi — Yapay Zeka Film Portalı" src="https://github.com/user-attachments/assets/5371efbe-e4dd-42cb-868f-be72752a4f7c" />
+<img width="1902" height="2681" alt="Screenshot 2026-08-10 at 19-17-45 Film Öneri Sistemi — Yapay Zeka Film Portalı" src="https://github.com/user-attachments/assets/e755418f-fb57-4edd-8330-1d6e5cc953ba" />
+<img width="1902" height="2392" alt="Screenshot 2026-08-10 at 19-18-39 Film Öneri Sistemi — Yapay Zeka Film Portalı" src="https://github.com/user-attachments/assets/9d1673dd-f9f0-4744-a5fb-02f563b67806" />
+<img width="1902" height="3394" alt="Screenshot 2026-08-10 at 19-18-53 Film Öneri Sistemi — Yapay Zeka Film Portalı" src="https://github.com/user-attachments/assets/082a079d-4250-4df7-8a07-451d7b22d64e" />
 
-**İyi Seyirler! 🎉**
+---
+
+## 📡 Önemli REST API Uç Noktaları (Endpoints)
+
+- `GET /api/movies` – Sayfalama, arama, tür, yapım yılı aralığı ve puan filtresiyle filmleri listeler.
+- `GET /api/movies/{id}` – Belirli bir filme ait detaylı bilgileri getirir.
+- `GET /api/genres` – Mevcut film türlerini listeler.
+- `GET /api/models` – Eğitilmiş makine öğrenmesi modellerini ve başarım metriklerini listeler.
+- `GET /api/stats` – Veri setine ait genel istatistikleri, En Çok Oy Alan İlk 10 Filmi ve En Yüksek Ortalama Puana Sahip İlk 10 Filmi döndürür.
+- `POST /api/predict` – Seçilen ML modelini kullanarak belirli bir film için gerçek zamanlı olasılık tahmini yapar.
+- `POST /api/recommend` – Kullanıcı kriterlerine ve seçilen ML modeline göre ilk N önerilen filmi oluşturur.
+- `GET /api/poster/{tmdb_id}` – TMDb meta etiketlerinden poster URL’sini getiren proxy uç noktasıdır (API anahtarı gerekmez).
