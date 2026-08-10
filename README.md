@@ -24,7 +24,7 @@ The system utilizes the **MovieLens 32M (December 2023)** dataset provided by [G
 
 ## 🚀 Key Features
 
-- **Big Data Processing & Mining:** Cleaned and indexed **32,000,204** ratings from **200,948** users across **87,585** movies into SQLite.
+- **Big Data Processing & Mining:** Cleaned and indexed **32,000,204** ratings from **200,948** users across **27,585** movies into SQLite.
 - **7 Machine Learning Models:** Trains and evaluates Logistic Regression, Decision Tree, Random Forest, Gradient Boosting, XGBoost, LightGBM, and CatBoost models using 5-Fold Cross Validation.
 - **FastAPI REST API:** Full RESTful API with SQLite persistence, model serialization via `joblib`, and automated documentation.
 - **Dockerized React Frontend:** Built with React & Vite, running entirely inside Docker containers without host node/npm dependencies.
@@ -123,10 +123,13 @@ Filim-neriSistemi/
 
 ## 📸 Screenshots
 
-<img width="1902" height="994" alt="Screenshot 2026-08-10 at 19-18-59 Film Öneri Sistemi — Yapay Zeka Film Portalı" src="https://github.com/user-attachments/assets/5371efbe-e4dd-42cb-868f-be72752a4f7c" />
 <img width="1902" height="2681" alt="Screenshot 2026-08-10 at 19-17-45 Film Öneri Sistemi — Yapay Zeka Film Portalı" src="https://github.com/user-attachments/assets/e755418f-fb57-4edd-8330-1d6e5cc953ba" />
+
 <img width="1902" height="2392" alt="Screenshot 2026-08-10 at 19-18-39 Film Öneri Sistemi — Yapay Zeka Film Portalı" src="https://github.com/user-attachments/assets/9d1673dd-f9f0-4744-a5fb-02f563b67806" />
+
 <img width="1902" height="3394" alt="Screenshot 2026-08-10 at 19-18-53 Film Öneri Sistemi — Yapay Zeka Film Portalı" src="https://github.com/user-attachments/assets/082a079d-4250-4df7-8a07-451d7b22d64e" />
+
+<img width="1902" height="994" alt="Screenshot 2026-08-10 at 19-18-59 Film Öneri Sistemi — Yapay Zeka Film Portalı" src="https://github.com/user-attachments/assets/5371efbe-e4dd-42cb-868f-be72752a4f7c" />
 
 ---
 
@@ -164,7 +167,7 @@ Projelerdeki veriler [GroupLens Research](https://grouplens.org/datasets/moviele
 
 ## 🚀 Proje Öne Çıkan Özellikleri
 
-- **Büyük Veri İşleme & Madenciliği:** **200.948** kullanıcıya ait **32.000.204** oy verisi ve **87.585** film SQLite veritabanına indekslenmiştir.
+- **Büyük Veri İşleme & Madenciliği:** **200.948** kullanıcıya ait **32.000.204** oy verisi ve **27.629** film SQLite veritabanına indekslenmiştir.
 - **7 Eğitilmiş ML Modeli:** Logistic Regression, Decision Tree, Random Forest, Gradient Boosting, XGBoost, LightGBM ve CatBoost modelleri 5-Katlı Çapraz Doğrulama ile eğitilip saklanmıştır.
 - **FastAPI REST API:** SQLite desteği, `joblib` model serileştirmesi ve otomatik Swagger dokümantasyonu.
 - **Dockerized React Ön Yüzü:** Bilgisayarınıza Node.js/npm kurmanıza gerek kalmadan Docker konteynerleri üzerinde Nginx ile çalışan duyarlı web arayüzü.
@@ -254,10 +257,13 @@ Filim-neriSistemi/
 
 ## 📸 Ekran Görüntüleri
 
-<img width="1902" height="994" alt="Screenshot 2026-08-10 at 19-18-59 Film Öneri Sistemi — Yapay Zeka Film Portalı" src="https://github.com/user-attachments/assets/5371efbe-e4dd-42cb-868f-be72752a4f7c" />
 <img width="1902" height="2681" alt="Screenshot 2026-08-10 at 19-17-45 Film Öneri Sistemi — Yapay Zeka Film Portalı" src="https://github.com/user-attachments/assets/e755418f-fb57-4edd-8330-1d6e5cc953ba" />
+
 <img width="1902" height="2392" alt="Screenshot 2026-08-10 at 19-18-39 Film Öneri Sistemi — Yapay Zeka Film Portalı" src="https://github.com/user-attachments/assets/9d1673dd-f9f0-4744-a5fb-02f563b67806" />
+
 <img width="1902" height="3394" alt="Screenshot 2026-08-10 at 19-18-53 Film Öneri Sistemi — Yapay Zeka Film Portalı" src="https://github.com/user-attachments/assets/082a079d-4250-4df7-8a07-451d7b22d64e" />
+
+<img width="1902" height="994" alt="Screenshot 2026-08-10 at 19-18-59 Film Öneri Sistemi — Yapay Zeka Film Portalı" src="https://github.com/user-attachments/assets/5371efbe-e4dd-42cb-868f-be72752a4f7c" />
 
 ---
 
