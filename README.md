@@ -107,7 +107,7 @@ Filim-neriSistemi/
 
 ## 🤖 Trained Machine Learning Algorithms
 
-| Algoritma | Accuracy | AUC Score | CV Mean | Eğitim Süresi |
+| Algoritma | Accuracy | AUC Score | CV Mean | Train Time |
 |---|---|---|---|---|
 | **Logistic Regression** | %85.0 | 0.902 | %84.95 | ~1.2s |
 | **Random Forest** | %85.4 | 0.912 | %85.38 | ~14.5s |
@@ -241,7 +241,7 @@ Filim-neriSistemi/
 
 ## 🤖 Eğitilmiş Makine Öğrenmesi Algoritmaları
 
-| Algoritma | Doğruluk (Accuracy) | AUC Skoru | CV Ortalaması | Eğitim Süresi |
+| Algoritma | Doğruluk | AUC Skoru | CV Ortalaması | Eğitim Süresi |
 |---|---|---|---|---|
 | **Logistic Regression** | %85.0 | 0.902 | %84.95 | ~1.2 sn |
 | **Random Forest** | %85.4 | 0.912 | %85.38 | ~14.5 sn |
