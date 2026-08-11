@@ -100,7 +100,6 @@ Filim-neriSistemi/
 ├── ModelResult/              # Saved ML models (.joblib) & comparison CSVs
 ├── run_backend.bat           # One-click script for Backend
 ├── run_frontend.bat          # One-click script for Docker Frontend
-├── run_all.bat               # One-click script for Docker Compose
 └── README.md                 # Project documentation
 ```
 
@@ -235,7 +234,6 @@ Filim-neriSistemi/
 ├── ModelResult/              # Eğitilen ML modelleri (.joblib) & sonuç CSV'leri
 ├── run_backend.bat           # Backend başlatma betiği
 ├── run_frontend.bat           # Docker Frontend başlatma betiği
-├── run_all.bat               # Docker Compose tüm sistem betiği
 └── README.md                 # Proje dokümantasyonu
 ```
 
